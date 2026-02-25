@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Download, RefreshCw, Box, Shield, Settings, Terminal, CheckCircle2, Info, ArrowRight, Monitor, Cpu, HardDrive, User, Target, ChevronRight, RotateCcw } from 'lucide-react';
 import { AnimatedGrid } from '../components/AnimatedGrid';
+import { useDistros } from '../hooks/useDistros';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const translations = {
@@ -97,6 +98,7 @@ const translations = {
 export const PosInstalacao = () => {
   const { lang } = useLanguage();
   const t = translations[lang];
+  const allDistros = useDistros();
   const [step, setStep] = useState(1);
   const [selectedDistro, setSelectedDistro] = useState('');
   const [specs, setSpecs] = useState({
@@ -165,13 +167,25 @@ export const PosInstalacao = () => {
       <div className="flex flex-col gap-2">
         <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Outra distro?</label>
         <div className="flex gap-2">
-          <input 
-            type="text"
-            placeholder="Ex: Zorin OS, Solus..."
-            className="flex-grow bg-white border-2 border-gray-100 rounded-xl px-6 py-4 focus:outline-none focus:border-primary transition-all"
+          <select 
+            className="flex-grow bg-white border-2 border-gray-100 rounded-xl px-6 py-4 focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer"
             value={selectedDistro}
-            onChange={(e) => setSelectedDistro(e.target.value)}
-          />
+            onChange={(e) => {
+              setSelectedDistro(e.target.value);
+              if (e.target.value) setStep(2);
+            }}
+          >
+            <option value="">Selecione outra distro...</option>
+            {allDistros
+              .filter(d => !t.distros_popular.includes(d.name))
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map(distro => (
+                <option key={distro.id} value={distro.name}>
+                  {distro.name}
+                </option>
+              ))
+            }
+          </select>
           <button 
             disabled={!selectedDistro}
             onClick={() => setStep(2)}
@@ -399,7 +413,7 @@ export const PosInstalacao = () => {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-display font-bold mb-6"
+            className="text-3xl md:text-5xl font-display font-bold mb-6"
           >
             {t.hero_title}
           </motion.h1>
