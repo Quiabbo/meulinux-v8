@@ -10,7 +10,6 @@ import { Conteudo } from './pages/Conteudo';
 import { DistroMatch } from './pages/DistroMatch';
 import { DistroDetail } from './pages/DistroDetail';
 import { PosInstalacao } from './pages/PosInstalacao';
-import { Admin } from './pages/Admin';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AnimatedGrid } from './components/AnimatedGrid';
 
@@ -28,7 +27,6 @@ export default function App() {
               <Route path="/contato" element={<Contato />} />
               <Route path="/distromatch" element={<DistroMatch />} />
               <Route path="/pos-instalacao" element={<PosInstalacao />} />
-              <Route path="/admin" element={<Admin />} />
               <Route path="/:id" element={<DistroDetail />} />
             </Routes>
           </main>
